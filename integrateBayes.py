@@ -36,7 +36,7 @@ def integrate_bayes(cues, score, params):
             raise Exception('Unknown cue')
 
     p_obj = params.pobj
-    score_bayes = np.zeros(score.shape[0])
+    score_bayes = np.zeros(len(score))
     bin_number = np.array(bin_number, dtype=np.int)
     bin_number -= 1     # From matlab index to numpy index
 

@@ -14,4 +14,5 @@ def draw_boxes(img, boxes, base_color=(1, 0, 0), line_width=3):
         color = base_color * score / max_score
         rect = plt.Rectangle((xmin, ymin), xmax - xmin, ymax - ymin, linewidth=line_width, edgecolor=color, fill=False)
         ax.add_patch(rect)
+    plt.axis('off')
     plt.show()

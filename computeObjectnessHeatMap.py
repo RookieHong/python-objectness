@@ -13,8 +13,10 @@ def compute_objectness_heat_map(img, boxes):
 
     plt.subplot(2, 1, 1).set_title('Input image')
     plt.imshow(img)
+    plt.axis('off')
 
     plt.subplot(2, 1, 2).set_title('Objectness heat map')
     plt.imshow(map, cmap=plt.get_cmap('jet'))
+    plt.axis('off')
 
     plt.show()

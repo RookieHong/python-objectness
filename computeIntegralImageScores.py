@@ -12,10 +12,11 @@ def compute_integral_img_scores(integral_img, windows):
 
     width = integral_img.shape[1]
     integral_img = integral_img.reshape(-1)
-    index1 = width * (windows[:, 3] + 1) + windows[:, 2]
-    index2 = width * (windows[:, 1]) + windows[:, 0] - 1
-    index3 = width * (windows[:, 3] + 1) + windows[:, 0] - 1
-    index4 = width * (windows[:, 1]) + windows[:, 2]
+    # The -1 is to transform the matlab index to numpy index
+    index1 = width * (windows[:, 3] + 1) + windows[:, 2] - 1
+    index2 = width * (windows[:, 1]) + windows[:, 0] - 1 - 1
+    index3 = width * (windows[:, 3] + 1) + windows[:, 0] - 1 - 1
+    index4 = width * (windows[:, 1]) + windows[:, 2] - 1
 
     # Original matlab code:
     # windows[windows == 0] = 1
