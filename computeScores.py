@@ -10,12 +10,21 @@ from mex_functions.slidingWindowComputeScore import sliding_window_compute_score
 from retrieveCoordinates import retrieve_coordinates
 from generateWindows import generate_windows
 from computeIntegralImageScores import compute_integral_img_scores
-from py_segment.py_segment import py_segment
+from py_segment.py_segment import py_segment_img
 from segmentArea import segment_area
 from integralHistSuperpixels import integral_hist_superpixels
+from c_segment.c_segment import c_segment_img
 
 
 def compute_scores(img, cue, params, windows=None):
+    """
+
+    :param img:
+    :param cue:
+    :param params:
+    :param windows: (x1, y1, x2, y2) - python indices: from 0 to (width - 1), or (height - 1).
+    :return:
+    """
     boxes = None
     if windows is None:
         if cue == 'MS':
@@ -60,7 +69,7 @@ def compute_scores(img, cue, params, windows=None):
                     boxes.append(np.hstack([box_coordinates, score_scale.reshape(-1, 1)]))
 
             boxes = np.array(boxes).reshape(-1, 5)
-            boxes = boxes[:params.distribution_windows] # might be more than 100,000
+            boxes = boxes[:params.distribution_windows]             # might be more than 100,000
 
         elif cue == 'CC':
             windows = generate_windows(img, 'uniform', params)      # generate windows
@@ -76,12 +85,13 @@ def compute_scores(img, cue, params, windows=None):
 
         return boxes
 
+    windows += 1  # From python indices to matlab indices
     if cue == 'CC':
         height, width, _ = img.shape
 
         lab_img = rgb2lab(img)
         Q = compute_quant_matrix(lab_img, params.CC.quant)
-        integral_histogram = compute_integral_histogram(Q, height, width, np.prod(params.CC.quant))     # (prod_quant * (H + 1) * (W + 1))
+        integral_histogram = compute_integral_histogram(Q, height, width, np.prod(params.CC.quant))     # (prod_quant * (H + 1) * (W + 1)), col-first.
 
         xmin = np.round(windows[:, 0])
         ymin = np.round(windows[:, 1])
@@ -135,7 +145,9 @@ def compute_scores(img, cue, params, windows=None):
         min_area = basis_min_area * sf
         k = basis_k
 
-        S = py_segment(img=img, sigma=sigma, neighbor=4, K=k, min_comp_size=min_area)
+        # S = c_segment_img(img=img, sigma=sigma, k=k, min_area=min_area)                         # C segment
+        S = py_segment_img(img=img, sigma=sigma, neighbor=4, K=k, min_comp_size=min_area)     # Python segment
+
         _, _, S = np.unique(S, return_index=True, return_inverse=True)
         S = S.reshape(I.shape[0], I.shape[1])
         superpixels = segment_area(S)
@@ -160,6 +172,8 @@ def compute_scores(img, cue, params, windows=None):
 
     else:
         print("Option not known: check the cue names")
+
+    boxes[:, :4] -= 1   # From matlab indices to python indices
 
     return boxes
 

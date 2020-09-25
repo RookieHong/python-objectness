@@ -1,5 +1,19 @@
 # Comparisons of results
 
+
+## Combination of cues:
+
+Original: 
+
+![Original](../results/original/002053_comb_boxes.jpg)
+![Original](../results/original/002053_comb_heatmap.jpg)
+
+Python:
+
+![Original](../results/my_impl/002053_comb_boxes.png)
+![Original](../results/my_impl/002053_comb_heatmap.png)
+
+
 ## MS
 
 Original: 

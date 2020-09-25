@@ -6,6 +6,14 @@ from numba import jit
 
 
 def generate_windows(img, opt_gen, params, cue=None):
+    """
+
+    :param img:
+    :param opt_gen:
+    :param params:
+    :param cue:
+    :return: windows: (x1, y1, x2, y2) - python indices: from 0 to (width - 1), or (height - 1).
+    """
     height, width, _ = img.shape
 
     if opt_gen == 'uniform':
@@ -16,6 +24,7 @@ def generate_windows(img, opt_gen, params, cue=None):
         xmin, ymin, xmax, ymax = generate_coords(opt_gen, height, width, total=total_samples, min_height=min_height, min_width=min_width)
 
         windows = np.hstack([xmin, ymin, xmax, ymax])
+        windows -= 1    # From matlab index to python index
 
     elif opt_gen == 'dense':  # for SS or ED
         assert cue is not None, "cue is not specified"
@@ -58,17 +67,17 @@ def generate_coords(opt_gen, height, width, total, min_height=None, min_width=No
         ymax = np.zeros((total, 1))
 
         for j in range(total):
-            x1 = round(random.random() * (width - 1))
-            x2 = round(random.random() * (width - 1))
+            x1 = round(random.random() * (width - 1) + 1)
+            x2 = round(random.random() * (width - 1) + 1)
             while abs(x1 - x2) + 1 < min_width:
-                x1 = round(random.random() * (width - 1))
-                x2 = round(random.random() * (width - 1))
+                x1 = round(random.random() * (width - 1) + 1)
+                x2 = round(random.random() * (width - 1) + 1)
 
-            y1 = round(random.random() * (height - 1))
-            y2 = round(random.random() * (height - 1))
+            y1 = round(random.random() * (height - 1) + 1)
+            y2 = round(random.random() * (height - 1) + 1)
             while abs(y1 - y2) + 1 < min_height:
-                y1 = round(random.random() * (height - 1))
-                y2 = round(random.random() * (height - 1))
+                y1 = round(random.random() * (height - 1) + 1)
+                y2 = round(random.random() * (height - 1) + 1)
 
             xmin[j] = min(x1, x2)
             ymin[j] = min(y1, y2)

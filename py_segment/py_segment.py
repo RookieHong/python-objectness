@@ -43,7 +43,7 @@ def generate_img_array(forest, width, height):
     return img_array
 
 
-def py_segment(img, sigma, neighbor, K, min_comp_size):
+def py_segment_img(img, sigma, neighbor, K, min_comp_size):
     # if neighbor != 4 and neighbor!= 8:
     #     logger.warn('Invalid neighborhood choosed. The acceptable values are 4 or 8.')
     #     logger.warn('Segmenting with 4-neighborhood...')
@@ -99,4 +99,4 @@ if __name__ == '__main__':
                     datefmt='%m-%d %H:%M')
     logger = logging.getLogger(__name__)
 
-    py_segment(args.sigma, args.neighbor, args.K, args.min_comp_size, args.input_file)
+    py_segment_img(args.sigma, args.neighbor, args.K, args.min_comp_size, args.input_file)

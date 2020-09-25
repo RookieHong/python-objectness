@@ -8,7 +8,7 @@ def segment_area(N):
         'area': []
     }
 
-    tot_segms = np.max(N)
+    tot_segms = np.max(N) + 1   # Segmentation id starts from 0
     for sid in range(tot_segms):
         cols, rows = np.where(N == sid)
         segms['coords'].append(np.vstack([cols, rows]))

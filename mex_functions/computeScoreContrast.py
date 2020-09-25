@@ -4,6 +4,20 @@ from numba import jit
 
 @jit(nopython=True)
 def compute_score_contrast(integral_histogram, height, width, xmin, ymin, xmax, ymax, thetaCC, prod_quant, num_windows):
+    """
+
+    :param integral_histogram: Column-first major array, flatten from (prod_quant, (height + 1) * (width + 1)).
+    :param height:
+    :param width:
+    :param xmin:
+    :param ymin:
+    :param xmax:
+    :param ymax:
+    :param thetaCC:
+    :param prod_quant:
+    :param num_windows:
+    :return:
+    """
     # assert len(integral_histogram.shape) == 2, "integral_histogram must be a real double matrix"
     # assert integral_histogram.shape[1] == (height + 1) * (width + 1), "integral_histogram must be a real double matrix"
     # integral_histogram = integral_histogram.reshape(-1)
@@ -28,6 +42,11 @@ def compute_score_contrast(integral_histogram, height, width, xmin, ymin, xmax, 
         maxmin = int(prod_quant * (xmax[w] * (height + 1) + ymin[w] - 1))
         minmax = int(prod_quant * ((xmin[w] - 1) * (height + 1) + ymax[w]))
 
+        # maxmax = int(prod_quant * (ymax[w] * (width + 1) + xmax[w]))
+        # minmin = int(prod_quant * ((ymin[w] - 1) * (width + 1) + xmin[w] - 1))
+        # maxmin = int(prod_quant * ((ymin[w] - 1) * (width + 1) + xmax[w]))
+        # minmax = int(prod_quant * ((ymax[w]) * (width + 1) + xmin[w] - 1))
+
         for k in range(prod_quant):
             inside[k] = integral_histogram[maxmax + k] + integral_histogram[minmin + k] - integral_histogram[maxmin + k] - integral_histogram[minmax + k]
             sum_inside += inside[k]
@@ -48,6 +67,11 @@ def compute_score_contrast(integral_histogram, height, width, xmin, ymin, xmax, 
         minmin = int(prod_quant * ((xmin_surr - 1) * (height + 1) + ymin_surr - 1))
         maxmin = int(prod_quant * (xmax_surr * (height + 1) + ymin_surr - 1))
         minmax = int(prod_quant * ((xmin_surr - 1) * (height + 1) + ymax_surr))
+
+        # maxmax = int(prod_quant * (ymax_surr * (width + 1) + xmax_surr))
+        # minmin = int(prod_quant * ((ymin_surr - 1) * (width + 1) + xmin_surr - 1))
+        # maxmin = int(prod_quant * ((ymax_surr - 1) * (width + 1) + xmin_surr))
+        # minmax = int(prod_quant * (ymax_surr * (width + 1) + xmin_surr - 1))
 
         sum_outside = 0
         for k in range(prod_quant):

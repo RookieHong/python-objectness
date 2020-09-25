@@ -4,41 +4,59 @@ Python implementation of PAMI 2012 paper "[Measuring the Objectness of Image Win
 This implementation is based on the [original matlab code](http://www.vision.ee.ethz.ch/~calvin).
 
 ## Results
-
-Original matlab implementation:
-![Original](results/original/002053_comb_boxes.jpg)
-![Original](results/original/002053_comb_heatmap.jpg)
-
-This python implementation:
 ![Python](results/my_impl/002053_comb_boxes.png)
 ![Python](results/my_impl/002053_comb_heatmap.png)
 
-More comparisons of results can be found [here.](results/readme.md)
+Comparisons of the original matlab and this python implementation can be found [here.](results/readme.md)
 
 ## Get started
 
-1. Clone this repository into your computer:
+1. Clone this repository:
 
-    `git clone https://github.com/RookieHong/python-objectness.git`
+    ```
+    git clone https://github.com/RookieHong/python-objectness.git
+   ```
 
 2. Install the [requirements](#Requirements) below.
 
-3. Run the `demo.py` and you can see the results:
+3. Run and see the results:
 
-    `python demo.py`
+    ```
+    python demo.py
+   ```
+
+4. (Optional, but recommended) A python implementation of superpixels segmentation is used as default, you can do the following to use the official C++ implementation through [pybind11](https://github.com/pybind/pybind11) instead (faster and more accurate):
+
+    ```
+   # Compile the python interface
+   $ sudo apt install cmake   # Install cmake
+   $ cd c_segment
+   $ mkdir build
+   $ cd build
+   $ cmake .. && make
+   ```
+   
+   Then, switch from py_segment to c_segment by modifying these two lines in [computeScores.py](computeScores.py):
+   ```
+   # Comment the py_segment line and uncomment the c_segment line
+   
+   S = c_segment_img(img=img, sigma=sigma, k=k, min_area=min_area)                         # C segment
+   # S = py_segment_img(img=img, sigma=sigma, neighbor=4, K=k, min_comp_size=min_area)     # Python segment
+   ```
+   
 
 ## Requirements
 - numpy
-- python-opencv
+- opencv-python
 - easydict
 - mat4py
 - numba
 
 ## Notes
 
-Because the implementation of many functions in MATLAB and numpy is different, the results are different from the original code.
+Because the implementation of many functions in MATLAB and numpy is different, the results might be slightly different from the original code.
 
-The superpixel computation code in `py-segment` folder is modified from a [python implementation](https://github.com/luisgabriel/image-segmentation), so this will also cause differences in code results. I'm working to provide a python interface for the original C++ [code](http://cs.brown.edu/~pff/segment/).
+The superpixel computation code in `py-segment` folder is modified from a [python implementation](https://github.com/luisgabriel/image-segmentation), so this will also cause differences in code results.
 
 ## Citation
 

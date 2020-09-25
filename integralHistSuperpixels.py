@@ -3,7 +3,7 @@ import cv2
 
 
 def integral_hist_superpixels(N):
-    total_segms = np.max(N)
+    total_segms = np.max(N) + 1     # Segmentation id starts from 0
     height, width = N.shape
 
     integral_hist = np.zeros((height + 1, width + 1, total_segms))

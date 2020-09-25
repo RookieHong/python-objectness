@@ -1,3 +1,5 @@
 __pycache__
 .idea
 test_imgs
+c_segment/build
+c_segment/.vscode
