@@ -169,8 +169,8 @@ def compute_scores(img, cue, params, windows=None):
         min_area = basis_min_area * sf
         k = basis_k
 
-        # S = c_segment_img(img=img, sigma=sigma, k=k, min_area=min_area)                         # C segment
-        S = py_segment_img(img=img, sigma=sigma, neighbor=4, K=k, min_comp_size=min_area)     # Python segment
+        S = c_segment_img(img=img, sigma=sigma, k=k, min_area=min_area)                         # C segment
+        # S = py_segment_img(img=img, sigma=sigma, neighbor=4, K=k, min_comp_size=min_area)     # Python segment
 
         _, _, S = np.unique(S, return_index=True, return_inverse=True)
         S = S.reshape(I.shape[0], I.shape[1])
