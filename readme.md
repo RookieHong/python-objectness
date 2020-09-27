@@ -7,7 +7,7 @@ This implementation is based on the [original matlab code](http://www.vision.ee.
 ![Python](results/my_impl/002053_comb_boxes.png)
 ![Python](results/my_impl/002053_comb_heatmap.png)
 
-Comparisons of the original matlab and this python implementation can be found [here.](results/readme.md)
+Detailed comparisons to the original Matlab implementation can be found [here](results/readme.md).
 
 ## Get started
 
@@ -15,26 +15,27 @@ Comparisons of the original matlab and this python implementation can be found [
 
     ```
     git clone https://github.com/RookieHong/python-objectness.git
-   ```
+    cd python-objectness
+    ```
 
 2. Install the [requirements](#Requirements) below.
 
-3. Run and see the results:
+3. Run the demo and see the results:
 
     ```
     python demo.py
-   ```
+    ```
 
 4. (Optional, but recommended) A python implementation of superpixels segmentation is used as default, you can do the following to use the official C++ implementation through [pybind11](https://github.com/pybind/pybind11) instead (faster and more accurate):
 
     ```
-   # Compile the python interface
-   $ sudo apt install cmake   # Install cmake
-   $ cd c_segment
-   $ mkdir build
-   $ cd build
-   $ cmake .. && make
-   ```
+    # Compile the python interface
+    $ sudo apt install cmake   # Install cmake
+    $ cd c_segment
+    $ mkdir build
+    $ cd build
+    $ cmake .. && make
+    ```
    
    Then, switch from py_segment to c_segment by modifying these two lines in [computeScores.py](computeScores.py):
    ```
@@ -57,6 +58,11 @@ Comparisons of the original matlab and this python implementation can be found [
 Because the implementation of many functions in MATLAB and numpy is different, the results might be slightly different from the original code.
 
 The superpixel computation code in `py-segment` folder is modified from a [python implementation](https://github.com/luisgabriel/image-segmentation), so this will also cause differences in code results.
+
+
+## To-do
+
+- [ ] Simplify the indices to make them more readable.
 
 ## Citation
 

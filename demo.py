@@ -7,7 +7,7 @@ from computeObjectnessHeatMap import compute_objectness_heat_map
 
 img_example = cv2.imread('test_imgs/014.jpg')[:, :, ::-1]
 params = default_params('.')
-# params.cues = ['SS']
+params.cues = ['SS']
 boxes = run_objectness(img_example, 10, params)
 draw_boxes(img_example, boxes, base_color=(1, 0, 0))
 compute_objectness_heat_map(img_example, boxes)

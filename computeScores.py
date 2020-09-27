@@ -14,6 +14,7 @@ from py_segment.py_segment import py_segment_img
 from segmentArea import segment_area
 from integralHistSuperpixels import integral_hist_superpixels
 from c_segment.c_segment import c_segment_img
+from windowComputeScores import window_compute_score
 
 
 def compute_scores(img, cue, params, windows=None):
@@ -86,7 +87,30 @@ def compute_scores(img, cue, params, windows=None):
         return boxes
 
     windows += 1  # From python indices to matlab indices
-    if cue == 'CC':
+    if cue == 'MS':
+        height, width, _ = img.shape
+
+        ms_scores = np.zeros((len(windows), len(params.MS.scale)))   # (num_windows, scales)
+        for sid in range(len(params.MS.scale)):
+            scale = params.MS.scale[sid]
+            threshold = params.MS.theta[sid]
+
+            cur_scale_windows = (windows - 1) * scale / [width, height, width, height]  # This must be done with python indices
+
+            channel_scores = np.zeros((len(windows), 3))
+            for channel in range(3):
+                saliency_map = saliency_map_channel(img, channel, params.MS.filtersize, scale)  # compute the saliency map
+
+                thrmap = saliency_map >= threshold
+                salmap = saliency_map * thrmap
+                thrmap_integral_image = cv2.integral(thrmap.astype(np.float))
+                salmap_integral_image = cv2.integral(salmap)
+
+                channel_scores[:, channel] = window_compute_score(cur_scale_windows, scale, salmap_integral_image, thrmap_integral_image)
+            ms_scores[:, sid] = np.sum(channel_scores, axis=1)
+        boxes = np.hstack([windows + 1, np.sum(ms_scores, axis=1, keepdims=True)])  # matlab indices
+
+    elif cue == 'CC':
         height, width, _ = img.shape
 
         lab_img = rgb2lab(img)
