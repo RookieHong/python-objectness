@@ -36,6 +36,7 @@ def run_objectness(img, num_samples, params):
             for i, cue in enumerate(params.cues):
                 if cue == 'MS':
                     params.cues[i] = params.cues[0]
+                    break
             params.cues[0] = 'MS'
 
         score = np.zeros((len(distribution_boxes), len(params.cues)))

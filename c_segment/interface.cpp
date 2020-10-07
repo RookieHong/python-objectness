@@ -45,6 +45,8 @@ std::vector<int> segment_img(const std::vector<uint8_t> &img_vec, const int heig
         }
     }
 
+    delete seg;
+
     return output;
 }
 

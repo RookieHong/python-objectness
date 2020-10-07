@@ -86,6 +86,7 @@ def compute_scores(img, cue, params, windows=None):
 
         return boxes
 
+    windows = windows.copy()
     windows += 1  # From python indices to matlab indices
     if cue == 'MS':
         height, width, _ = img.shape
